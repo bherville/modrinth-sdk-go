@@ -150,14 +150,41 @@ func GetProject(modrinthServer ModrinthServer, projectName string) (*Project, er
 	return &project, nil
 }
 
-func GetProjectVersions(modrinthServer ModrinthServer, projectName string) ([]ProjectVersion, error) {
+func GetProjectVersions(modrinthServer ModrinthServer, projectName string, loaders []string, gameVersions []string) ([]ProjectVersion, error) {
 	var projectVersions []ProjectVersion
-	err := callApi(&projectVersions, modrinthServer, http.MethodGet, ApiEndpointProject, []string{projectName, ApiEndpointVersion}, nil)
+	params := make(map[string]string)
+
+	if loaders != nil {
+		loadersJson, err := json.Marshal(loaders)
+		if err != nil {
+			return nil, err
+		}
+		params["loaders"] = string(loadersJson)
+	}
+	if gameVersions != nil {
+		gameVersionsJson, err := json.Marshal(gameVersions)
+		if err != nil {
+			return nil, err
+		}
+		params["game_versions"] = string(gameVersionsJson)
+	}
+
+	err := callApi(&projectVersions, modrinthServer, http.MethodGet, ApiEndpointProject, []string{projectName, ApiEndpointVersion}, params)
 	if err != nil {
 		return nil, err
 	}
 
 	return projectVersions, nil
+}
+
+func GetProjectVersion(modrinthServer ModrinthServer, project Project, versionIdOrNumber string) (ProjectVersion, error) {
+	var projectVersion ProjectVersion
+	err := callApi(&projectVersion, modrinthServer, http.MethodGet, ApiEndpointProject, []string{project.ID, "version"}, nil)
+	if err != nil {
+		return projectVersion, err
+	}
+
+	return projectVersion, nil
 }
 
 func GetProjectVersionFromHash(modrinthServer ModrinthServer, versionHash string, versionHashAlgo string) (ProjectVersion, error) {
