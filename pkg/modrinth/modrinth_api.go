@@ -114,23 +114,23 @@ type Gallery struct {
 }
 
 type ProjectVersion struct {
-	GameVersions    []string             `json:"game_versions"`
-	Loaders         []string             `json:"loaders"`
-	ID              string               `json:"id"`
-	ProjectID       string               `json:"project_id"`
-	AuthorID        string               `json:"author_id"`
-	Featured        bool                 `json:"featured"`
-	Name            string               `json:"name"`
-	VersionNumber   string               `json:"version_number"`
-	Changelog       string               `json:"changelog"`
-	ChangelogURL    any                  `json:"changelog_url"`
-	DatePublished   time.Time            `json:"date_published"`
-	Downloads       int                  `json:"downloads"`
-	VersionType     string               `json:"version_type"`
-	Status          string               `json:"status"`
-	RequestedStatus any                  `json:"requested_status"`
-	Files           []ProjectVersionFile `json:"files"`
-	Dependencies    []any                `json:"dependencies"`
+	GameVersions    []string                   `json:"game_versions"`
+	Loaders         []string                   `json:"loaders"`
+	ID              string                     `json:"id"`
+	ProjectID       string                     `json:"project_id"`
+	AuthorID        string                     `json:"author_id"`
+	Featured        bool                       `json:"featured"`
+	Name            string                     `json:"name"`
+	VersionNumber   string                     `json:"version_number"`
+	Changelog       string                     `json:"changelog"`
+	ChangelogURL    any                        `json:"changelog_url"`
+	DatePublished   time.Time                  `json:"date_published"`
+	Downloads       int                        `json:"downloads"`
+	VersionType     string                     `json:"version_type"`
+	Status          string                     `json:"status"`
+	RequestedStatus any                        `json:"requested_status"`
+	Files           []ProjectVersionFile       `json:"files"`
+	Dependencies    []ProjectVersionDependency `json:"dependencies"`
 }
 type ProjectVersionFileHash struct {
 	Sha512 string `json:"sha512"`
@@ -143,4 +143,9 @@ type ProjectVersionFile struct {
 	Primary  bool                   `json:"primary"`
 	Size     int                    `json:"size"`
 	FileType any                    `json:"file_type"`
+}
+
+type ProjectDependencies struct {
+	Projects []Project        `json:"projects"`
+	Versions []ProjectVersion `json:"versions"`
 }
