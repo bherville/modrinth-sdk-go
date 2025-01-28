@@ -187,6 +187,16 @@ func GetProjectVersion(modrinthServer ModrinthServer, project Project, versionId
 	return projectVersion, nil
 }
 
+func GetProjectDependencies(modrinthServer ModrinthServer, projectId string) (ProjectDependencies, error) {
+	var projectVersionDependencies ProjectDependencies
+	err := callApi(&projectVersionDependencies, modrinthServer, http.MethodGet, ApiEndpointProject, []string{projectId, "dependencies"}, nil)
+	if err != nil {
+		return projectVersionDependencies, err
+	}
+
+	return projectVersionDependencies, nil
+}
+
 func GetProjectVersionFromHash(modrinthServer ModrinthServer, versionHash string, versionHashAlgo string) (ProjectVersion, error) {
 	var projectVersion ProjectVersion
 	err := callApi(&projectVersion, modrinthServer, http.MethodGet, ApiEndpointVersionFile, []string{versionHash}, map[string]string{
