@@ -1,1 +1,39 @@
+# Coverage output
 /coverage.txt
+
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Build directories
+bin/
+build/
+
+# Vendor
+vendor/
+
+# Go test and coverage
+*.test
+coverage.out
+
+# IDEs and editors
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+
+# Environment
+.env
+.env.*
+
+# Misc
+*.out

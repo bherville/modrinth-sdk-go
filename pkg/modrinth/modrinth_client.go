@@ -209,6 +209,36 @@ func GetProjectVersionFromHash(modrinthServer ModrinthServer, versionHash string
 	return projectVersion, nil
 }
 
+// GetVersionByID retrieves a specific version by its ID
+func GetVersionByID(modrinthServer ModrinthServer, versionID string) (ProjectVersion, error) {
+	var projectVersion ProjectVersion
+	err := callApi(&projectVersion, modrinthServer, http.MethodGet, "v2/version", []string{versionID}, nil)
+	if err != nil {
+		return projectVersion, err
+	}
+
+	return projectVersion, nil
+}
+
+// GetMultipleVersions retrieves multiple versions by their IDs
+func GetMultipleVersions(modrinthServer ModrinthServer, versionIDs []string) ([]ProjectVersion, error) {
+	var projectVersions []ProjectVersion
+
+	idsJson, err := json.Marshal(versionIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	err = callApi(&projectVersions, modrinthServer, http.MethodGet, "v2/versions", nil, map[string]string{
+		"ids": string(idsJson),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return projectVersions, nil
+}
+
 func DownloadProjectVersion(modrinthServer ModrinthServer, projectVersionFile ProjectVersionFile, destination string) error {
 	out, err := os.Create(destination)
 	if err != nil {
