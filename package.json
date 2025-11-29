@@ -1,6 +1,6 @@
 {
   "name": "modrinth-sdk-go",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "description": "Version tracking for modrinth-sdk-go releases",
   "scripts": {
