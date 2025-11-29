@@ -3,6 +3,7 @@ name: Build
 on:
   push:
     branches: ["*"]
+    tags: ['v*']
   pull_request:
     branches: [main]
 
@@ -54,55 +55,19 @@ jobs:
           name: coverage-${{ matrix.go-version }}
           path: coverage.txt
 
-  changesets:
-    name: Changesets
+  release:
+    name: Release
     runs-on: ubuntu-latest
     needs: [build, test]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: startsWith(github.ref, 'refs/tags/v')
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
         with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Create Release Pull Request or Tag
-        id: changesets
-        uses: changesets/action@v1
-        with:
-          title: "chore(release): version packages"
-          commit: "chore(release): version packages"
-          version: npm run version
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Git Tag and Release
-        if: steps.changesets.outputs.hasChangesets == 'false'
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          TAG="v${VERSION}"
-          
-          # Check if tag already exists
-          if git rev-parse "$TAG" >/dev/null 2>&1; then
-            echo "Tag $TAG already exists, skipping"
-            exit 0
-          fi
-          
-          # Create and push the tag
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git tag -a "$TAG" -m "Release $TAG"
-          git push origin "$TAG"
-          
-          # Create GitHub release
-          gh release create "$TAG" \
-            --title "Release $TAG" \
-            --generate-notes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          generate_release_notes: true
+          draft: false
+          prerelease: ${{ contains(github.ref, '-beta') || contains(github.ref, '-alpha') }}
