@@ -1,0 +1,14 @@
+{
+  "name": "modrinth-sdk-go",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Version tracking for modrinth-sdk-go releases",
+  "scripts": {
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "changeset publish"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.0"
+  }
+}
