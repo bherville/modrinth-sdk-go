@@ -37,3 +37,6 @@ Thumbs.db
 
 # Misc
 *.out
+
+# Node.js (for changesets)
+node_modules/
