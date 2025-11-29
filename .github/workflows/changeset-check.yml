@@ -4,6 +4,8 @@
 # This check must pass before a PR can be merged.
 
 name: Changeset Check
+permissions:
+  contents: read
 
 on:
   pull_request:
